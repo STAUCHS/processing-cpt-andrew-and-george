@@ -25,6 +25,7 @@ public class Sketch extends PApplet {
   double dblSpdY;
   double dblStamina;
   boolean blnGravity = true;
+  long lngTimer;
   // PImage player;
 
   int[][][] intHitMap = new int[1][32][20];
@@ -130,8 +131,9 @@ public class Sketch extends PApplet {
         intDashing = 15;
       }
     } else if (intDashing == 0) {
-      for (int i = 0; i < 5000; i++) {
-        // System.out.print(" ");
+      lngTimer = System.nanoTime();
+      while (System.nanoTime() - lngTimer < 200000000){
+        //null
       }
       blnGravity = true;
       intDashing--;
