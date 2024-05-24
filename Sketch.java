@@ -136,11 +136,11 @@ public class Sketch extends PApplet {
       blnGravity = true;
       intDashing--;
       if (dblSpdY > 0) {
-        dblSpdX = 0;
-        dblSpdY = 7;
+        dblSpdX /= 2;
+        dblSpdY /= 2;
       } else {
-        dblSpdX = 0;
-        dblSpdY = 0;
+        dblSpdX /= 2;
+        dblSpdY /= 2;
       }
     } else {
       intDashing--;
@@ -258,7 +258,9 @@ public class Sketch extends PApplet {
         dblSpdY = 0;
       }
     } else {
-      intY += (int) dblSpdY;
+      if (intY + dblSpdY - 44 >= 0 && intY + dblSpdY <= 900){
+        intY += (int) dblSpdY;
+      }
     }
 
     // left detection
@@ -281,7 +283,9 @@ public class Sketch extends PApplet {
         dblSpdX = 0;
       }
     } else {
-      intX += (int) dblSpdX;
+      if (intX + dblSpdX + 44 < 1440 && intX + dblSpdX > 0){
+        intX += (int) dblSpdX;
+      }
     }
 
   }
