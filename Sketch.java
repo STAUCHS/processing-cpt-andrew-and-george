@@ -26,6 +26,10 @@ public class Sketch extends PApplet {
   double dblStamina;
   boolean blnGravity = true;
   long lngTimer;
+  long lngFrameTime = System.nanoTime();
+  long framesum = 0;
+  int framenum = 1;
+  int deathCount = 0;
   // PImage player;
 
   int[][][] intHitMap = new int[1][32][20];
@@ -44,18 +48,11 @@ public class Sketch extends PApplet {
     dblSpdX = 0;
     dblSpdY = 0;
     stage1();
-
+    frameRate(50);
   }
 
   public void draw() {
-    
-    if (intDashing > 13) {
-      translate(5, 5);
-    } else if (intDashing > 11) {
-      translate(-5, -5);
-    } else if (intDashing > 9) {
-      translate(5, 5);
-    }
+    screenShake();
     // Updates background
     fill(120, 210, 255);
     rect(0, 0, width, height);
@@ -65,13 +62,14 @@ public class Sketch extends PApplet {
       dblSpdY += 1.4;
     }
     if (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1) {
-      intDashs = 3;
-      dblStamina = 125;
+      if (intDashing < 7){
+        intDashs = 2;
+      }
+        dblStamina = 125;
     }
 
     if (intDashing == -1) {
-      if (blnClimb && dblStamina > 0 && (detect(intX - 1, intY) == 1 || detect(intX + 45, intY) == 1
-          || detect(intX - 1, intY - 44) == 1 || detect(intX + 45, intY - 44) == 1)) {
+      if (blnClimb && dblStamina > 0 && (detect(intX - 1, intY) == 1 || detect(intX + 45, intY) == 1 || detect(intX - 1, intY - 44) == 1 || detect(intX + 45, intY - 44) == 1)) {
         dblSpdX = 0;
         dblSpdY = 0;
         if (blnUp) {
@@ -102,39 +100,36 @@ public class Sketch extends PApplet {
       }
       if (blnDash && intDashs != 0) {
         if (blnUp && blnRight) {
-          dblSpdX = 12;
-          dblSpdY = -12;
+          dblSpdX = 18;
+          dblSpdY = -18;
         } else if (blnUp && blnLeft) {
-          dblSpdX = -12;
-          dblSpdY = -12;
+          dblSpdX = -18;
+          dblSpdY = -18;
         } else if (blnDown && blnLeft) {
-          dblSpdX = -12;
-          dblSpdY = 12;
+          dblSpdX = -18;
+          dblSpdY = 18;
         } else if (blnDown && blnRight) {
-          dblSpdX = 12;
-          dblSpdY = 12;
+          dblSpdX = 18;
+          dblSpdY = 18;
         } else if (blnUp) {
           dblSpdX = 0;
-          dblSpdY = -17;
+          dblSpdY = -25;
         } else if (blnLeft) {
-          dblSpdX = -17;
+          dblSpdX = -25;
           dblSpdY = 0;
         } else if (blnDown) {
           dblSpdX = 0;
-          dblSpdY = 17;
+          dblSpdY = 25;
         } else {
-          dblSpdX = 17;
+          dblSpdX = 25;
           dblSpdY = 0;
         }
         blnGravity = false;
         intDashs--;
-        intDashing = 15;
+        intDashing = 10;
       }
     } else if (intDashing == 0) {
       lngTimer = System.nanoTime();
-      while (System.nanoTime() - lngTimer < 200000000){
-        //null
-      }
       blnGravity = true;
       intDashing--;
       if (dblSpdY > 0) {
@@ -144,6 +139,8 @@ public class Sketch extends PApplet {
         dblSpdX /= 2;
         dblSpdY /= 2;
       }
+      //pause(lngTimer, 100000000);
+
     } else {
       intDashing--;
     }
@@ -162,10 +159,28 @@ public class Sketch extends PApplet {
     positionUpdate();
     fill((int) (dblStamina / 125 * 200 + 50));
     rect(intX, intY, 44, -44);
+    
   }
 
-  /*
-   * @ checks user input and saves it to boolean values
+  public void pause(long lngStart, long lngDuration){
+    while (System.nanoTime() - lngStart < lngDuration){
+      //null
+    }
+  }
+
+  /**
+   * shakes screen when dashing
+   */
+  public void screenShake(){
+    if (intDashing > 8) {
+      translate(5, 5);
+    } else if (intDashing > 6) {
+      translate(-5, -5);
+    } else if (intDashing > 4) {
+      translate(5, 5);
+    }
+  }
+  /* checks user input and saves it to boolean values
    */
   public void keyPressed() {
     if (keyCode == LEFT) {
@@ -223,7 +238,6 @@ public class Sketch extends PApplet {
    * updates the location of player
    * 
    * @param spd X
-   * 
    * @param spd Y
    * 
    * @author George
@@ -331,4 +345,6 @@ public class Sketch extends PApplet {
     intHitMap[0][7][9] = 1;
     intHitMap[0][15][17] = 1;
   }
+
+  
 }
