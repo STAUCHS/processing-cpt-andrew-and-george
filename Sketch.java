@@ -22,6 +22,7 @@ public class Sketch extends PApplet {
   int intY;
   int intDashs; // number of remaining dashes
   int intStage;
+  int intMoveDisable;
   double dblSpdX;
   double dblSpdY;
   double dblStamina;
@@ -56,6 +57,7 @@ public class Sketch extends PApplet {
     screenShake();
     // Updates background
     background(120, 210, 255);
+
     visualizeGrid();
 
     if (dblSpdY < 15 && blnGravity) {
@@ -67,96 +69,25 @@ public class Sketch extends PApplet {
       }
         dblStamina = 125;
     }
-
-    if (intDashing == -1) {
-      if (blnClimb && dblStamina > 0 && (detect(intX - 1, intY) == 1 || detect(intX + 45, intY) == 1 || detect(intX - 1, intY - 44) == 1 || detect(intX + 45, intY - 44) == 1)) {
-        dblSpdX = 0;
-        dblSpdY = 0;
-        if (blnUp) {
-          dblSpdY = -2.5;
-          dblStamina -= 1;
-        } else if (blnDown) {
-          dblSpdY = 2.5;
-          dblStamina -= 1;
-        }
-      } else if (blnRight && dblSpdX > 7.5 && dblSpdX < 10) {
-        dblSpdX = 10;
-      } else if (blnLeft && dblSpdX < -7.5 && dblSpdX > -10) {
-        dblSpdX = -10;
-      } else if (blnRight && dblSpdX < 10) {
-        dblSpdX += 2.5;
-      } else if (blnLeft && dblSpdX > -10) {
-        dblSpdX -= 2.5;
-      } else if (blnRight && dblSpdX > 10) {
-        dblSpdX -= 0.5;
-      } else if (blnLeft && dblSpdX < -10) {
-        dblSpdX += 0.5;
-      } else if (dblSpdX > -2 && dblSpdX < 2) {
-        dblSpdX = 0;
-      } else if (dblSpdX < 0) {
-        dblSpdX += 1.5;
-      } else if (dblSpdX > 0) {
-        dblSpdX -= 1.5;
-      }
-      if (blnDash && intDashs != 0 && blnDashCd) {
-        if (blnUp && blnRight) {
-          dblSpdX = 18;
-          dblSpdY = -18;
-        } else if (blnUp && blnLeft) {
-          dblSpdX = -18;
-          dblSpdY = -18;
-        } else if (blnDown && blnLeft) {
-          dblSpdX = -18;
-          dblSpdY = 18;
-        } else if (blnDown && blnRight) {
-          dblSpdX = 18;
-          dblSpdY = 18;
-        } else if (blnUp) {
-          dblSpdX = 0;
-          dblSpdY = -25;
-        } else if (blnLeft) {
-          dblSpdX = -25;
-          dblSpdY = 0;
-        } else if (blnDown) {
-          dblSpdX = 0;
-          dblSpdY = 25;
-        } else {
-          dblSpdX = 25;
-          dblSpdY = 0;
-        }
-        blnGravity = false;
-        intDashs--;
-        intDashing = 10;
-        blnDashCd = false;
-      }
-    } else if (intDashing == 0) {
-      blnGravity = true;
-      intDashing--;
-      if (dblSpdY > 0) {
-        dblSpdX /= 2;
-        dblSpdY /= 2;
-      } else {
-        dblSpdX /= 2;
-        dblSpdY /= 2;
-      }
-
-    } else {
-      intDashing--;
-    }
+    dashMechanic();
     if (blnJump && blnJumpCd && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)) {
       dblSpdY = -16;
       blnJumpCd = false;
     } else if (blnJump && blnJumpCd && ((detect(intX - 2, intY) == 1) || (detect(intX - 2, intY - 44) == 1))) {
-      dblSpdX = 25;
+      dblSpdX = 16;
       dblSpdY = -16;
+      intMoveDisable = -11;
       blnJumpCd = false;
     } else if (blnJump && blnJumpCd && ((detect(intX + 46, intY) == 1) || (detect(intX + 46, intY - 44) == 1))) {
-      dblSpdX = -25;
+      dblSpdX = -16;
       dblSpdY = -16;
+      intMoveDisable = 11;
       blnJumpCd = false;
     }
     positionUpdate();
-    fill((int) (dblStamina / 125 * 200 + 50));
+    fill((int) (255 - dblStamina / 125 * 200));
+    stroke((int) (255 - dblStamina / 125 * 200));
+    
     rect(intPastPositions[(intGameTick + 1) % 12][0] + 20, intPastPositions[(intGameTick + 1) % 12][1] - 30, 10, -10);
     rect(intPastPositions[(intGameTick + 3) % 12][0] + 17, intPastPositions[(intGameTick + 3) % 12][1] - 28, 14, -14);
     rect(intPastPositions[(intGameTick + 5) % 12][0] + 15, intPastPositions[(intGameTick + 5) % 12][1] - 26, 18, -18);
@@ -164,8 +95,14 @@ public class Sketch extends PApplet {
     rect(intPastPositions[(intGameTick + 9) % 12][0] + 10, intPastPositions[(intGameTick + 9) % 12][1] - 22, 26, -26);
     rect(intPastPositions[(intGameTick + 11) % 12][0] + 7, intPastPositions[(intGameTick + 11) % 12][1] - 20, 30, -30);
     intGameTick++;
-    
+    if (intMoveDisable > 0){
+      intMoveDisable--;
+    }else if(intMoveDisable < 0){
+      intMoveDisable++;
+    }
     image(imgPlayerRight, intX, intY-44);
+    stroke((int) (dblStamina / 125 * 200 + 50));
+
   }
 
   public void pause(long lngStart, long lngDuration){
@@ -241,9 +178,87 @@ public class Sketch extends PApplet {
     }
   }
 
+  public void dashMechanic(){
+    if (blnDash && intDashs != 0 && blnDashCd) {
+      if (blnUp && blnRight) {
+        dblSpdX = 18;
+        dblSpdY = -18;
+      } else if (blnUp && blnLeft) {
+        dblSpdX = -18;
+        dblSpdY = -18;
+      } else if (blnDown && blnLeft) {
+        dblSpdX = -18;
+        dblSpdY = 18;
+      } else if (blnDown && blnRight) {
+        dblSpdX = 18;
+        dblSpdY = 18;
+      } else if (blnUp) {
+        dblSpdX = 0;
+        dblSpdY = -25;
+      } else if (blnLeft) {
+        dblSpdX = -25;
+        dblSpdY = 0;
+      } else if (blnDown) {
+        dblSpdX = 0;
+        dblSpdY = 25;
+      } else {
+        dblSpdX = 25;
+        dblSpdY = 0;
+      }
+      blnGravity = false;
+      intDashs--;
+      intDashing = 10;
+      blnDashCd = false;
+    }
+    if (intDashing == -1) {
+      if (blnClimb && dblStamina > 0 && (detect(intX - 1, intY) == 1 || detect(intX + 45, intY) == 1 || detect(intX - 1, intY - 44) == 1 || detect(intX + 45, intY - 44) == 1)) {
+        dblSpdX = 0;
+        dblSpdY = 0;
+        if (blnUp) {
+          dblSpdY = -2.5;
+          dblStamina -= 1;
+        } else if (blnDown) {
+          dblSpdY = 2.5;
+          dblStamina -= 1;
+        }
+      } else if (blnRight && dblSpdX > 7.5 && dblSpdX < 10 && intMoveDisable <= 0) {
+        dblSpdX = 10;
+      } else if (blnLeft && dblSpdX < -7.5 && dblSpdX > -10 && intMoveDisable >= 0) {
+        dblSpdX = -10;
+      } else if (blnRight && dblSpdX < 10 && intMoveDisable <= 0) {
+        dblSpdX += 2.5;
+      } else if (blnLeft && dblSpdX > -10 && intMoveDisable >= 0) {
+        dblSpdX -= 2.5;
+      } else if (blnRight && dblSpdX > 10 && intMoveDisable <= 0) {
+        dblSpdX -= 0.5;
+      } else if (blnLeft && dblSpdX < -10 && intMoveDisable >= 0) {
+        dblSpdX += 0.5;
+      } else if (dblSpdX > -2 && dblSpdX < 2) {
+        dblSpdX = 0;
+      } else if (dblSpdX < 0) {
+        dblSpdX += 1.5;
+      } else if (dblSpdX > 0) {
+        dblSpdX -= 1.5;
+      }
+      
+    } else if (intDashing == 0) {
+      blnGravity = true;
+      intDashing--;
+      if (dblSpdY > 0) {
+        dblSpdX /= 2;
+        dblSpdY /= 2;
+      } else {
+        dblSpdX /= 2;
+        dblSpdY /= 2;
+      }
+
+    } else {
+      intDashing--;
+    }
+  }
+  
   /*
    * updates the location of player
-   * 
    * @param spd X
    * @param spd Y
    * 
@@ -336,7 +351,7 @@ public class Sketch extends PApplet {
     for (int i = 0; i < 32; i++) {
       for (int j = 0; j < 20; j++) {
         intHitMap[0][i][j] = 0;
-        if (j >= 18) {
+        if (j > 18) {
           intHitMap[0][i][j] = 1;
         }
         if (i == 0 || i == 31) {
