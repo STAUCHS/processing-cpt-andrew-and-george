@@ -27,7 +27,7 @@ public class Sketch extends PApplet {
   double dblSpdY;
   double dblStamina;
   boolean blnGravity = true;
-  int deathCount = 0;
+  int intDeathCount = 0;
   int intGameTick = 0;
   PImage imgPlayerRight;
   PImage imgPlayerLeft;
@@ -123,10 +123,11 @@ public class Sketch extends PApplet {
     //   imgTempPlayer = imgPlayerForJump;
     // }
     imgTempPlayer = imgPlayerRight; // THIS IS FOR TESSTING PLEEEEEEEEAAAAAAAASE REMMEBER TO REMOVE AT LATER
-    image(imgTempPlayer, intX, intY - 44);
-    for (int i = 1; i < 14; i += 2){
-      imgTempPlayer.resize(45 - i, 45 - i);
-      image(imgTempPlayer, intPastPos[(intGameTick + i) % 12][0] + 20, intPastPos[(intGameTick + i) % 12][1]);
+    imgTempPlayer.resize(45, 45);
+    image(imgPlayerRight, intX, intY - 44);
+    for (int i = 1; i < 14; i += 2){                //nneeeeeeeeeeeeeeeeeeeeeeeeddddddddddddddddssss to be recoded
+    //imgTempPlayer.resize(45 - i, 45 - i);
+    //   image(imgTempPlayer, intPastPos[(intGameTick + i) % 12][0] + 20, intPastPos[(intGameTick + i) % 12][1]);
     }
     
     
@@ -304,7 +305,9 @@ public class Sketch extends PApplet {
    */
   public void positionUpdate() {
     if (detect(intX, intY) == -1 || detect(intX, intY - 44) == -1 || detect(intX + 44, intY) == -1 || detect(intX +44, intY - 44)== -1){
-
+      intDeathCount++;
+      intX = 100;
+      intY = 300;
     } else{
     int intCounter = 0;
     if (dblSpdX >= 45) {
@@ -385,6 +388,9 @@ public class Sketch extends PApplet {
         if (detect(i, j) == 1) {
           fill(0);
           rect(i, j, 45, 45);
+        }else if (detect(i, j) == -1){
+          fill(255, 100, 100);
+          rect(i, j, 45, 45);
         }
       }
     }
@@ -404,7 +410,7 @@ public class Sketch extends PApplet {
     }
     intHitMap[0][16][15] = 1;
     intHitMap[0][15][16] = 1;
-    intHitMap[0][17][17] = 1;
+    intHitMap[0][17][17] = -1;
     intHitMap[0][14][17] = 1;
     intHitMap[0][16][16] = 1;
     intHitMap[0][16][17] = 1;
