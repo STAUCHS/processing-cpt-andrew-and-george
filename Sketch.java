@@ -30,10 +30,15 @@ public class Sketch extends PApplet {
   int deathCount = 0;
   int intGameTick = 0;
   PImage imgPlayerRight;
-  // PImage player;
+  PImage imgPlayerLeft;
+  PImage imgPlayerFor;
+  PImage imgPlayerRightJump;
+  PImage imgPlayerLeftJump;
+  PImage imgPlayerForJump;
+  PImage imgTempPlayer;
 
   int[][][] intHitMap = new int[1][32][20];
-  int[][] intPastPositions = new int [12][2];
+  int[][] intPastPos = new int [12][2];
 
   public void settings() {
     size(1440, 900);
@@ -51,6 +56,11 @@ public class Sketch extends PApplet {
     stage1();
     frameRate(50);
     imgPlayerRight = loadImage("Explorer Right Facing.png");
+    //imgPlayerLeft = loadImage("Explorer Left Facing.png");
+    //imgPlayerFor = loadImage("Explorer Forward Facing.png");
+    //imgPlayerRightJump = loadImage("Explorer Right Facing Jump.png");
+    //imgPlayerLeftJump = loadImage("Explorer Left Facing Jump.png");
+    //imgPlayerForJump = loadImage("Explorer Forward Facing Jump.png");
   }
 
   public void draw() {
@@ -67,9 +77,62 @@ public class Sketch extends PApplet {
       if (intDashing < 7){
         intDashs = 2;
       }
-        dblStamina = 125;
+      dblStamina = 125;
     }
     dashMechanic();
+    jumpMechanic();
+    positionUpdate();
+    drawPlayer();
+    intGameTick++;
+    if (intMoveDisable > 0){
+      intMoveDisable--;
+    }else if(intMoveDisable < 0){
+      intMoveDisable++;
+    }
+
+  }
+
+  public void pause(long lngStart, long lngDuration){
+    while (System.nanoTime() - lngStart < lngDuration){
+      //null
+    }
+  }
+
+  public void drawPlayer(){
+    fill((int) (255 - dblStamina / 125 * 200));
+    stroke((int) (255 - dblStamina / 125 * 200));
+    
+    rect(intPastPos[(intGameTick + 1) % 12][0] + 20, intPastPos[(intGameTick + 1) % 12][1] - 30, 10, -10);
+    rect(intPastPos[(intGameTick + 3) % 12][0] + 17, intPastPos[(intGameTick + 3) % 12][1] - 28, 14, -14);
+    rect(intPastPos[(intGameTick + 5) % 12][0] + 15, intPastPos[(intGameTick + 5) % 12][1] - 26, 18, -18);
+    rect(intPastPos[(intGameTick + 7) % 12][0] + 12, intPastPos[(intGameTick + 7) % 12][1] - 24, 22, -22);
+    rect(intPastPos[(intGameTick + 9) % 12][0] + 10, intPastPos[(intGameTick + 9) % 12][1] - 22, 26, -26);
+    rect(intPastPos[(intGameTick + 11) % 12][0] + 7, intPastPos[(intGameTick + 11) % 12][1] - 20, 30, -30);
+    
+    // if (dblSpdX > 0 && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)){
+    //   imgTempPlayer = imgPlayerRight;
+    // } else if (dblSpdX < 0 && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)){
+    //   imgTempPlayer = imgPlayerLeft;
+    // } else if(detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1){
+    //   imgTempPlayer = imgPlayerFor;
+    // } else if(dblSpdX > 0){
+    //   imgTempPlayer = imgPlayerRightJump;
+    // } else if(dblSpdX < 0){
+    //   imgTempPlayer = imgPlayerLeftJump;
+    // } else {
+    //   imgTempPlayer = imgPlayerForJump;
+    // }
+    imgTempPlayer = imgPlayerRight; // THIS IS FOR TESSTING PLEEEEEEEEAAAAAAAASE REMMEBER TO REMOVE AT LATER
+    image(imgTempPlayer, intX, intY - 44);
+    for (int i = 1; i < 14; i += 2){
+      imgTempPlayer.resize(45 - i, 45 - i);
+      image(imgTempPlayer, intPastPos[(intGameTick + i) % 12][0] + 20, intPastPos[(intGameTick + i) % 12][1]);
+    }
+    
+    
+  }
+
+  public void jumpMechanic(){
     if (blnJump && blnJumpCd && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)) {
       dblSpdY = -16;
       blnJumpCd = false;
@@ -83,31 +146,6 @@ public class Sketch extends PApplet {
       dblSpdY = -16;
       intMoveDisable = 11;
       blnJumpCd = false;
-    }
-    positionUpdate();
-    fill((int) (255 - dblStamina / 125 * 200));
-    stroke((int) (255 - dblStamina / 125 * 200));
-    
-    rect(intPastPositions[(intGameTick + 1) % 12][0] + 20, intPastPositions[(intGameTick + 1) % 12][1] - 30, 10, -10);
-    rect(intPastPositions[(intGameTick + 3) % 12][0] + 17, intPastPositions[(intGameTick + 3) % 12][1] - 28, 14, -14);
-    rect(intPastPositions[(intGameTick + 5) % 12][0] + 15, intPastPositions[(intGameTick + 5) % 12][1] - 26, 18, -18);
-    rect(intPastPositions[(intGameTick + 7) % 12][0] + 12, intPastPositions[(intGameTick + 7) % 12][1] - 24, 22, -22);
-    rect(intPastPositions[(intGameTick + 9) % 12][0] + 10, intPastPositions[(intGameTick + 9) % 12][1] - 22, 26, -26);
-    rect(intPastPositions[(intGameTick + 11) % 12][0] + 7, intPastPositions[(intGameTick + 11) % 12][1] - 20, 30, -30);
-    intGameTick++;
-    if (intMoveDisable > 0){
-      intMoveDisable--;
-    }else if(intMoveDisable < 0){
-      intMoveDisable++;
-    }
-    image(imgPlayerRight, intX, intY-44);
-    stroke((int) (dblStamina / 125 * 200 + 50));
-
-  }
-
-  public void pause(long lngStart, long lngDuration){
-    while (System.nanoTime() - lngStart < lngDuration){
-      //null
     }
   }
 
@@ -265,6 +303,9 @@ public class Sketch extends PApplet {
    * @author George
    */
   public void positionUpdate() {
+    if (detect(intX, intY) == -1 || detect(intX, intY - 44) == -1 || detect(intX + 44, intY) == -1 || detect(intX +44, intY - 44)== -1){
+
+    } else{
     int intCounter = 0;
     if (dblSpdX >= 45) {
       dblSpdX = 44.5;
@@ -325,8 +366,9 @@ public class Sketch extends PApplet {
         intX += (int) dblSpdX;
       }
     }
-    intPastPositions[intGameTick % 12][0] = intX;
-    intPastPositions[intGameTick % 12][1] = intY;
+    intPastPos[intGameTick % 12][0] = intX;
+    intPastPos[intGameTick % 12][1] = intY;
+    }
   }
 
   public int detect(int intXCoordinate, int intYCoordinate) {
@@ -337,6 +379,7 @@ public class Sketch extends PApplet {
   }
 
   public void visualizeGrid() {
+    stroke((int) (dblStamina / 125 * 200 + 50));
     for (int i = 0; i < width; i += 45) {
       for (int j = 0; j < height; j += 45) {
         if (detect(i, j) == 1) {
