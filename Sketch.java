@@ -34,8 +34,12 @@ public class Sketch extends PApplet {
   PImage imgPlayerFor;
   PImage imgPlayerRightJump;
   PImage imgPlayerLeftJump;
-  PImage imgPlayerForJump;
   PImage imgTempPlayer;
+  PImage imgPlayerLeftDash;
+  PImage imgPlayerRightDash;
+  PImage imgPlayerLeftClimb;
+  PImage imgPlayerRightClimb;
+  
 
   int[][][] intHitMap = new int[1][32][20];
   int[][] intPastPos = new int [12][2];
@@ -56,11 +60,15 @@ public class Sketch extends PApplet {
     stage1();
     frameRate(50);
     imgPlayerRight = loadImage("Explorer Right Facing.png");
-    //imgPlayerLeft = loadImage("Explorer Left Facing.png");
-    //imgPlayerFor = loadImage("Explorer Forward Facing.png");
-    //imgPlayerRightJump = loadImage("Explorer Right Facing Jump.png");
-    //imgPlayerLeftJump = loadImage("Explorer Left Facing Jump.png");
-    //imgPlayerForJump = loadImage("Explorer Forward Facing Jump.png");
+    imgPlayerLeft = loadImage("Explorer Left Facing.png");
+    imgPlayerFor = loadImage("Explorer Front Facing.png");
+    imgPlayerRightJump = loadImage("Explorer Right Facing Jump.png");
+    imgPlayerLeftJump = loadImage("Explorer Left Facing Jump.png");
+    imgPlayerLeftClimb = loadImage("Explorer Left Facing Climb.png");
+    imgPlayerRightClimb = loadImage("Explorer Right Facing Climb.png");
+    imgPlayerRightDash = loadImage("Explorer Right Facing Dash.png");
+    imgPlayerLeftDash = loadImage("Explorer Left Facing Dash.png");    
+    
   }
 
   public void draw() {
@@ -99,38 +107,36 @@ public class Sketch extends PApplet {
   }
 
   public void drawPlayer(){
-    fill((int) (255 - dblStamina / 125 * 200));
-    stroke((int) (255 - dblStamina / 125 * 200));
+    // fill((int) (255 - dblStamina / 125 * 200));
+    // stroke((int) (255 - dblStamina / 125 * 200));
     
-    rect(intPastPos[(intGameTick + 1) % 12][0] + 20, intPastPos[(intGameTick + 1) % 12][1] - 30, 10, -10);
-    rect(intPastPos[(intGameTick + 3) % 12][0] + 17, intPastPos[(intGameTick + 3) % 12][1] - 28, 14, -14);
-    rect(intPastPos[(intGameTick + 5) % 12][0] + 15, intPastPos[(intGameTick + 5) % 12][1] - 26, 18, -18);
-    rect(intPastPos[(intGameTick + 7) % 12][0] + 12, intPastPos[(intGameTick + 7) % 12][1] - 24, 22, -22);
-    rect(intPastPos[(intGameTick + 9) % 12][0] + 10, intPastPos[(intGameTick + 9) % 12][1] - 22, 26, -26);
-    rect(intPastPos[(intGameTick + 11) % 12][0] + 7, intPastPos[(intGameTick + 11) % 12][1] - 20, 30, -30);
+    // rect(intPastPos[(intGameTick + 1) % 12][0] + 20, intPastPos[(intGameTick + 1) % 12][1] - 30, 10, -10);
+    // rect(intPastPos[(intGameTick + 3) % 12][0] + 17, intPastPos[(intGameTick + 3) % 12][1] - 28, 14, -14);
+    // rect(intPastPos[(intGameTick + 5) % 12][0] + 15, intPastPos[(intGameTick + 5) % 12][1] - 26, 18, -18);
+    // rect(intPastPos[(intGameTick + 7) % 12][0] + 12, intPastPos[(intGameTick + 7) % 12][1] - 24, 22, -22);
+    // rect(intPastPos[(intGameTick + 9) % 12][0] + 10, intPastPos[(intGameTick + 9) % 12][1] - 22, 26, -26);
+    // rect(intPastPos[(intGameTick + 11) % 12][0] + 7, intPastPos[(intGameTick + 11) % 12][1] - 20, 30, -30);
     
-    // if (dblSpdX > 0 && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)){
-    //   imgTempPlayer = imgPlayerRight;
-    // } else if (dblSpdX < 0 && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)){
-    //   imgTempPlayer = imgPlayerLeft;
-    // } else if(detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1){
-    //   imgTempPlayer = imgPlayerFor;
-    // } else if(dblSpdX > 0){
-    //   imgTempPlayer = imgPlayerRightJump;
-    // } else if(dblSpdX < 0){
-    //   imgTempPlayer = imgPlayerLeftJump;
-    // } else {
-    //   imgTempPlayer = imgPlayerForJump;
-    // }
-    imgTempPlayer = imgPlayerRight; // THIS IS FOR TESSTING PLEEEEEEEEAAAAAAAASE REMMEBER TO REMOVE AT LATER
-    imgTempPlayer.resize(45, 45);
-    image(imgPlayerRight, intX, intY - 44);
-    for (int i = 1; i < 14; i += 2){                //nneeeeeeeeeeeeeeeeeeeeeeeeddddddddddddddddssss to be recoded
-    //imgTempPlayer.resize(45 - i, 45 - i);
-    //   image(imgTempPlayer, intPastPos[(intGameTick + i) % 12][0] + 20, intPastPos[(intGameTick + i) % 12][1]);
+    if(dblSpdX < 0 && intDashing > -1){
+      imgTempPlayer = imgPlayerLeftDash;
+    } else if(dblSpdX > 0 && intDashing > -1){
+      imgTempPlayer = imgPlayerRightDash;
+    } else if((detect(intX - 2, intY) == 1 || detect(intX - 2, intY - 44) == 1) && (dblSpdX > 0 || (blnClimb && dblStamina > 0)) ){
+      imgTempPlayer = imgPlayerLeftClimb;
+    } else if((detect(intX + 46, intY) == 1 || detect(intX + 46, intY - 44) == 1) && (dblSpdX < 0 || (blnClimb && dblStamina > 0)) ){
+      imgTempPlayer = imgPlayerRightClimb;
+    }else if (dblSpdX > 0 && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)){
+      imgTempPlayer = imgPlayerRight;
+    } else if (dblSpdX < 0 && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)){
+      imgTempPlayer = imgPlayerLeft;    
+    } else if(dblSpdX > 0){
+      imgTempPlayer = imgPlayerRightJump;
+    } else if(dblSpdX < 0){
+      imgTempPlayer = imgPlayerLeftJump;
+    } else {
+      imgTempPlayer = imgPlayerFor;
     }
-    
-    
+    image(imgTempPlayer, intX, intY - 44);
   }
 
   public void jumpMechanic(){
@@ -308,6 +314,9 @@ public class Sketch extends PApplet {
       intDeathCount++;
       intX = 100;
       intY = 300;
+      dblSpdX = 0;
+      dblSpdY = 0;
+      intDashs = 0;
     } else{
     int intCounter = 0;
     if (dblSpdX >= 45) {
