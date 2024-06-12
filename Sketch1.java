@@ -126,12 +126,6 @@ public class Sketch1 extends PApplet {
       }
     } else if (intDashing == 0) {
       lngTimer = System.nanoTime();
-      pause();
-      pause();
-      pause();
-      pause();
-      pause();
-      pause();
       blnGravity = true;
       intDashing--;
       if (dblSpdY > 0) {
