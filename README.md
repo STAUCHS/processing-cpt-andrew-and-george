@@ -1,7 +1,6 @@
-![Level 3](https://github.com/STAUCHS/processing-cpt-andrew-and-george/assets/159323420/036389eb-53bc-423d-b160-1b6180792ba4)[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=15143047&assignment_repo_type=AssignmentRepo)
 # Jungle Jump!
 
-Welcome to Jungle Jump! In this thrilling adventure/platformer game, you step into the mystical jungle as a daring explorer, venturing through the ancient, enchanted forest in search of legendary loot hidden within the forgotten castle. The path is treacherous, filled with obstacles and deadly spikes, challenging your agility and reflexes. Your mission is to navigate these dangers by jumping, dashing, and climbing your way through the lush, yet perilous landscape of the jungle.
+Welcome to Jungle Jump! In this thrilling adventure/platformer game, you step into the mystical jungle as a daring explorer, venturing through the ancient, enchanted forest in search of legendary loot hidden within the forgotten castle. The path is treacherous, filled with obstacles and deadly spikes, challenging your agility and reflexes. Your mission is to navigate these dangers by jumping, dashing, and climbing your way through the lush, yet perilous landscape of the jungle. Shown below is an example of one of the levels you can play!
 
 ![Level 3](https://github.com/STAUCHS/processing-cpt-andrew-and-george/assets/159323420/b4cb25de-7bad-4e7c-97ee-2ba3177d2878)
 
