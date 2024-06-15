@@ -2,6 +2,8 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 
+
+
 public class Sketch extends PApplet {
   /**
    * game
@@ -21,6 +23,8 @@ public class Sketch extends PApplet {
   boolean blnDashCd;
   boolean blnGravity = true;
   boolean blnNewLvl = true;
+  boolean blnEnd = false;
+  boolean blnTitle = true;
   int intDashing = -1;
   int intX;
   int intY;
@@ -62,11 +66,16 @@ public class Sketch extends PApplet {
   PImage imgHat;
   PImage imgKey;
   PImage imgWin;
+  PImage imgTitle;
+
+
 
 
   int[][] intSpawnPoint = {{45, 750, 1350, 600}, {60, 600, 30, 225}, {1310, 225, 203, 810}, {90, 90, 1350, 113}, {55, 820, -1, -1}}; // and
-  int[][][] intHitMap = new int[5][33][21]; // and change first index to 5
+  int[][][] intHitMap = new int[6][33][21]; // and change first index to 5
   int[][] intPastPos = new int [12][2];
+
+
 
 
   public void settings() {
@@ -74,7 +83,11 @@ public class Sketch extends PApplet {
     System.out.println("JOEL WAS HERE HI MD CHEN");
 
 
+
+
   }
+
+
 
 
   public void setup() {
@@ -117,13 +130,20 @@ public class Sketch extends PApplet {
     imgHat = loadImage("Explorer Hat.png");
     imgWin = loadImage("Victory.png");
     imgKey = loadImage("Key.png");
+    imgTitle = loadImage("Title Screen");
   }
 
 
+
+
   public void draw() {
-    if (intStage == 5){
+    if (blnEnd){
       image(imgWin, 0, 0);
       text("You Died " + intDeathCount + "times!", 770, 300);
+    } else if (blnTitle){
+      intMoveDisable = 2;
+      blnGravity = false;
+      image(imgTitle, 0, 0);
     }
     screenShake();
     backdrop();
@@ -241,6 +261,8 @@ public class Sketch extends PApplet {
   }
 
 
+
+
   public void drawPlayer(){
     if (intDashing > -1 || dblSpdX + dblSpdY > 22 || dblSpdX + dblSpdY < -22 ){
       image(imgHat, intPastPos[(intGameTick + 1) % 12][0] + 20, intPastPos[(intGameTick + 1) % 12][1] - 30);
@@ -253,6 +275,8 @@ public class Sketch extends PApplet {
     if (blnKey){
       image(imgKey, intPastPos[(intGameTick + 7) % 12][0] + 12, intPastPos[(intGameTick + 7) % 12][1] - 24);
     }
+
+
 
 
     if(dblSpdX < 0 && intDashing > -1){
@@ -276,6 +300,8 @@ public class Sketch extends PApplet {
     }
     image(imgTempPlayer, intX, intY - 44);
   }
+
+
 
 
   public void jumpMechanic(){
@@ -311,6 +337,8 @@ public class Sketch extends PApplet {
   }
 
 
+
+
   /**
    * shakes screen when dashing
    */
@@ -340,6 +368,8 @@ public class Sketch extends PApplet {
     }
 
 
+
+
     if (key == 'Z' || key == 'z') {
       blnClimb = true;
     }
@@ -351,6 +381,8 @@ public class Sketch extends PApplet {
     }
    
   }
+
+
 
 
   public void keyReleased() {
@@ -368,6 +400,8 @@ public class Sketch extends PApplet {
     }
 
 
+
+
     if (key == 'Z' || key == 'z') {
       blnClimb = false;
     }
@@ -380,6 +414,8 @@ public class Sketch extends PApplet {
       blnJumpCd = true;
     }
   }
+
+
 
 
   public void dashMechanic(){
@@ -458,6 +494,8 @@ public class Sketch extends PApplet {
       dblSpdY *= (2./3);
 
 
+
+
     } else {
       intDashing--;
     }
@@ -475,9 +513,14 @@ public class Sketch extends PApplet {
       intDeathCount++;
       dblDeathTime = 10.5;
     } else if (detect(intX, intY) == 2 || detect(intX, intY - 44) == 2 || detect(intX + 44, intY) == 2 || detect(intX +44, intY - 44) == 2){// and
-      blnNewLvl = true;
-      intStage++;
-      respawn();
+      blnNewLvl = true;      
+      if (intStage == 4){
+        blnEnd = true;
+      } else {
+        intStage++;
+        respawn();
+      }
+     
     } else if (detect(intX, intY) == -2 || detect(intX, intY - 44) == -2 || detect(intX + 44, intY) == -2 || detect(intX +44, intY - 44) == -2){ // and
       blnNewLvl = false;
       intStage--;
@@ -511,6 +554,8 @@ public class Sketch extends PApplet {
         }
 
 
+
+
       } else if (intY - 44 + dblSpdY >= 0 && (detect(intX, intY - 44 + (int) dblSpdY) == 1 || detect(intX + 44, intY - 44 + (int) dblSpdY) == 1)) { // top detection
         while (detect(intX, intY - 44 - intCounter) != 1 && detect(intX + 44, intY - 44 - intCounter) != 1) {
           intCounter++;
@@ -526,6 +571,8 @@ public class Sketch extends PApplet {
       }
 
 
+
+
       // left detection
       intCounter = 0;
       if (detect(intX + (int) dblSpdX, intY) == 1 || detect(intX + (int) dblSpdX, intY - 44) == 1) {
@@ -536,6 +583,8 @@ public class Sketch extends PApplet {
         if (intDashing == -1) {
           dblSpdX = 0;
         }
+
+
 
 
       } else if (detect(intX + (int) dblSpdX + 44, intY) == 1 || detect(intX + (int) dblSpdX + 44, intY - 44) == 1) { // right detection
@@ -557,9 +606,13 @@ public class Sketch extends PApplet {
   }
 
 
+
+
   public int detect(int intXCoordinate, int intYCoordinate) {
     return intHitMap[intStage][intXCoordinate / 45][intYCoordinate / 45];
   }
+
+
 
 
   public void visualizeGrid() {
@@ -576,6 +629,8 @@ public class Sketch extends PApplet {
       }
     }
   }
+
+
 
 
   public void stage0(){
@@ -610,7 +665,7 @@ public class Sketch extends PApplet {
     intHitMap[0][12][15] = 1;
     intHitMap[0][23][14] = 1;
     for (int i = 0; i <= 31; i++) {
-      intHitMap[2][i][20] = -1;
+      intHitMap[0][i][20] = -1;
     }
   }
   public void stage1() {
@@ -733,8 +788,12 @@ public class Sketch extends PApplet {
     intHitMap[2][18][5] = -1;
 
 
+
+
     intHitMap[2][19][10] = -1;
     intHitMap[2][19][14] = -1;
+
+
 
 
     intHitMap[2][19][18] = -1;
@@ -897,5 +956,11 @@ public class Sketch extends PApplet {
     intHitMap[4][23][9] = 1;
     intHitMap[4][24][9] = 1;
     intHitMap[4][23][10] = 1;
+  }
+  public void mouseClicked(){
+    if (blnTitle){
+      blnGravity = true;
+    }
+    blnTitle = false;
   }
 }
