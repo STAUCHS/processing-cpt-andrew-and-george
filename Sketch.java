@@ -81,14 +81,7 @@ public class Sketch extends PApplet {
   public void settings() {
     size(1440, 900);
     System.out.println("JOEL WAS HERE HI MD CHEN");
-
-
-
-
   }
-
-
-
 
   public void setup() {
     // Sets Background Color
@@ -130,7 +123,7 @@ public class Sketch extends PApplet {
     imgHat = loadImage("Explorer Hat.png");
     imgWin = loadImage("Victory.png");
     imgKey = loadImage("Key.png");
-    imgTitle = loadImage("Title Screen");
+    imgTitle = loadImage("Title Screen.png");
   }
 
 
@@ -139,14 +132,18 @@ public class Sketch extends PApplet {
   public void draw() {
     if (blnEnd){
       image(imgWin, 0, 0);
-      text("You Died " + intDeathCount + "times!", 770, 300);
+      fill(25, 200, 25);
+      textSize(50);
+      text("You Died " + intDeathCount + " Times!", 630, 300);
     } else if (blnTitle){
       intMoveDisable = 2;
       blnGravity = false;
       image(imgTitle, 0, 0);
+    } else {
+      screenShake();
+      backdrop();
     }
-    screenShake();
-    backdrop();
+    
     //visualizeGrid();
     if (dblDeathTime == -1){
       if (dblSpdY < 15 && blnGravity) {
