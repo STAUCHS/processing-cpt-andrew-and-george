@@ -68,15 +68,9 @@ public class Sketch extends PApplet {
   PImage imgWin;
   PImage imgTitle;
 
-
-
-
-  int[][] intSpawnPoint = {{45, 750, 1350, 600}, {60, 600, 30, 225}, {1310, 225, 203, 810}, {90, 90, 1350, 113}, {55, 820, -1, -1}}; // and
-  int[][][] intHitMap = new int[6][33][21]; // and change first index to 5
+  int[][] intSpawnPoint = {{45, 750, 1350, 600}, {60, 600, 60, 225}, {1310, 225, 203, 810}, {90, 90, 1350, 113}, {55, 820, -1, -1}}; // and
+  int[][][] intHitMap = new int[5][33][21]; // and change first index to 5
   int[][] intPastPos = new int [12][2];
-
-
-
 
   public void settings() {
     size(1440, 900);
@@ -144,7 +138,7 @@ public class Sketch extends PApplet {
       backdrop();
     }
     
-    //visualizeGrid();
+    visualizeGrid();
     if (dblDeathTime == -1){
       if (dblSpdY < 15 && blnGravity) {
         dblSpdY += 1.4;
@@ -261,20 +255,14 @@ public class Sketch extends PApplet {
 
 
   public void drawPlayer(){
-    if (intDashing > -1 || dblSpdX + dblSpdY > 22 || dblSpdX + dblSpdY < -22 ){
+    if (intDashing > -1){
       image(imgHat, intPastPos[(intGameTick + 1) % 12][0] + 20, intPastPos[(intGameTick + 1) % 12][1] - 30);
-      image(imgHat, intPastPos[(intGameTick + 3) % 12][0] + 17, intPastPos[(intGameTick + 3) % 12][1] - 28);
       image(imgHat, intPastPos[(intGameTick + 5) % 12][0] + 15, intPastPos[(intGameTick + 5) % 12][1] - 26);
-      image(imgHat, intPastPos[(intGameTick + 7) % 12][0] + 12, intPastPos[(intGameTick + 7) % 12][1] - 24);
       image(imgHat, intPastPos[(intGameTick + 9) % 12][0] + 10, intPastPos[(intGameTick + 9) % 12][1] - 22);
-      image(imgHat, intPastPos[(intGameTick + 11) % 12][0] + 7, intPastPos[(intGameTick + 11) % 12][1] - 20);
     }
     if (blnKey){
-      image(imgKey, intPastPos[(intGameTick + 7) % 12][0] + 12, intPastPos[(intGameTick + 7) % 12][1] - 24);
+      image(imgKey, intPastPos[(intGameTick + 7) % 12][0] - 50, intPastPos[(intGameTick + 3) % 12][1] - 130);
     }
-
-
-
 
     if(dblSpdX < 0 && intDashing > -1){
       imgTempPlayer = imgPlayerLeftDash;
@@ -641,7 +629,7 @@ public class Sketch extends PApplet {
         }
       }
     }
-    for (int i =1; i < 12; i++) {
+    for (int i = 1; i < 12; i++) {
         intHitMap[0][i][18] = 1;
     }
     for (int i = 15; i < 21; i++) {
@@ -741,7 +729,7 @@ public class Sketch extends PApplet {
     for (int i = 16; i <= 19; i++) {
       intHitMap[2][0][i] = 1;
     }
-    intHitMap[0][1][16] = 1;
+    intHitMap[2][1][16] = 1;
     for (int i = 4; i <= 9; i++) {
       intHitMap[2][i][19] = 1;
     }
@@ -752,7 +740,7 @@ public class Sketch extends PApplet {
       intHitMap[2][i][19] = 1;
     }
     for (int i = 27; i <= 31; i++) {
-      intHitMap[2][i][9] = 1;
+      intHitMap[2][i][7] = 1;
     }
     for (int i = 8; i <= 19; i++) {
       intHitMap[2][31][i] = 1;
@@ -783,16 +771,9 @@ public class Sketch extends PApplet {
     intHitMap[2][18][1] = -1;
     intHitMap[2][17][5] = -1;
     intHitMap[2][18][5] = -1;
-
-
-
-
+    intHitMap[2][19][6] = -1;
     intHitMap[2][19][10] = -1;
     intHitMap[2][19][14] = -1;
-
-
-
-
     intHitMap[2][19][18] = -1;
     intHitMap[2][19][19] = -1;
     intHitMap[2][22][8] = -1;
@@ -813,7 +794,7 @@ public class Sketch extends PApplet {
       }
     }
     for (int i = 0; i <= 2; i++) {
-      for (int j = 9; j <= 19; j++) {
+      for (int j = 8; j <= 19; j++) {
         intHitMap[3][i][j] = 1;
       }
     }
@@ -869,13 +850,12 @@ public class Sketch extends PApplet {
     for (int i = 9; i <= 11; i++) {
       intHitMap[3][23][i] = -1;
     }
-    intHitMap[3][3][9] = 1;
+    intHitMap[3][3][8] = 1;
     intHitMap[3][5][17] = -1;
     intHitMap[3][9][17] = -1;
     intHitMap[3][10][10] = -1;
     intHitMap[3][15][3] = -1;
     intHitMap[3][16][3] = -1;
-    intHitMap[3][17][10] = -1;
     intHitMap[3][15][16] = -1;
     intHitMap[3][24][8] = -1;
     intHitMap[3][25][8] = -1;
