@@ -4,7 +4,7 @@ Welcome to Jungle Jump! In this thrilling adventure/platformer game, you step in
 
 ![Level 3](https://github.com/STAUCHS/processing-cpt-andrew-and-george/assets/159323420/b4cb25de-7bad-4e7c-97ee-2ba3177d2878)
 
-To get started, use the left and right keys to move left and right. These simple controls are just the beginning; as you progress through the levels, you'll be introduced to additional mechanics and techniques necessary for survival and success. These mechanics include things like climbing on walls and dashing in different directions! Pay close attention to the instructions provided throughout the game, as they will guide you on how to master new skills and overcome increasingly difficult challenges.
+To get started, use the left and right keys to move left and right. These simple controls are just the beginning; as you progress through the levels, you'll be introduced to additional mechanics and techniques necessary for survival and success. These mechanics include things like climbing on walls and dashing in different directions! Pay close attention to the instructions provided throughout the game, as they will guide you on how to master new skills and overcome increasingly difficult challenges. Your death count will also be displayed upon the completion of the game.
 
 As you journey deeper into the jungle, you'll encounter various interactable elements. Not every object on the screen can be interacted with; only those that stand out and appear distinct from the background are interactable. Be careful not to try and climb on something that isn’t there!
 
