@@ -139,7 +139,6 @@ public class Sketch extends PApplet {
     if (lngSongTime + 113000000000L <= System.nanoTime()){
       play("Anxiety.wav");
       lngSongTime = System.nanoTime();
-      System.out.println("iubgrieub");
     }
     // draws backdrops(end screen, title screen, stage backdrops)
     if (blnEnd){
