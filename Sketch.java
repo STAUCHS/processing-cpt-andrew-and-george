@@ -1,9 +1,6 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
-
-
-
 public class Sketch extends PApplet {
   // declare variables
   boolean blnLeft;
@@ -38,7 +35,6 @@ public class Sketch extends PApplet {
   PImage imgPlayerFor;
   PImage imgPlayerRightJump;
   PImage imgPlayerLeftJump;
-  PImage imgTempPlayer;
   PImage imgPlayerLeftDash;
   PImage imgPlayerRightDash;
   PImage imgPlayerLeftClimb;
@@ -69,7 +65,6 @@ public class Sketch extends PApplet {
 
   public void settings() {
     size(1440, 900);
-    System.out.println("JOEL WAS HERE HI MD CHEN");
   }
 
   public void setup() {
@@ -135,7 +130,6 @@ public class Sketch extends PApplet {
       backdrop();
       fill(50, 50, 225);
       rect(1420, 880, -20, -fltStamina);
-      System.out.println(fltStamina);
     }
     
     if (dblDeathTime == -1){ // if not dead
@@ -240,6 +234,7 @@ public class Sketch extends PApplet {
 
   /**
    * spawns player after death or entering new stage
+   * @author Andrew
    */
   public void respawn(){
     if (blnNewLvl){
@@ -281,10 +276,8 @@ public class Sketch extends PApplet {
     } else if (dblSpdX < 0 && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)){
       image(imgPlayerLeft, intX, intY - 44);   
     } else if(dblSpdX > 0){
-      imgTempPlayer = imgPlayerRightJump;
       image(imgPlayerRightJump, intX, intY - 44);
     } else if(dblSpdX < 0){
-      imgTempPlayer = imgPlayerLeftJump;
       image(imgPlayerLeftJump, intX, intY - 44);
     } else {
       image(imgPlayerFor, intX, intY - 44);
@@ -430,7 +423,7 @@ public class Sketch extends PApplet {
     }
   }
  
-  /*
+  /**
    * updates the location of player and checks for collision
    * @author George and Andrew
    */
@@ -521,6 +514,7 @@ public class Sketch extends PApplet {
  * @param intXCoordinate // x coordinate of desired block
  * @param intYCoordinate // y coordinate of desired block
  * @return type of block corresponding array based off coordinate entered
+ * @author George
  */
   public int detect(int intXCoordinate, int intYCoordinate) {
     return intHitMap[intStage][intXCoordinate / 45][intYCoordinate / 45];
@@ -776,6 +770,9 @@ public class Sketch extends PApplet {
     }
     for (int i = 9; i <= 11; i++) {
       intHitMap[3][23][i] = -1;
+    }
+    for (int i = 0; i <= 31; i++) {
+      intHitMap[3][i][20] = -1;
     }
     intHitMap[3][3][8] = 1;
     intHitMap[3][5][17] = -1;
