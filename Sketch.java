@@ -1,5 +1,8 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+import java.io.File;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class Sketch extends PApplet {
   // declare variables
@@ -58,7 +61,7 @@ public class Sketch extends PApplet {
   PImage imgKey;
   PImage imgWin;
   PImage imgTitle;
-
+  long lngSongTime = 0;
   int[][] intSpawnPoint = {{45, 750, 1350, 600}, {60, 600, 60, 225}, {1310, 225, 203, 810}, {90, 90, 1350, 113}, {55, 820, -1, -1}}; // array for spawn points(spawn x initial, spawn y initial, spawn x returning, spawn y returning)
   int[][][] intHitMap = new int[5][33][21]; // hit boxes for maps, [stage][coloumn/x][row/y]
   int[][] intPastPos = new int [12][2]; // stores coordinates of past 12 frames
@@ -112,9 +115,32 @@ public class Sketch extends PApplet {
     imgWin = loadImage("Victory.png");
     imgKey = loadImage("Key.png");
     imgTitle = loadImage("Title Screen.png");
+    play("Anxiety.wav");
+    lngSongTime = System.nanoTime();
+  }
+
+
+    /**
+     * plays bg music
+     * @param filename the name of the file that is going to be played
+     */
+    public static void play(String filename){
+    try{
+        Clip clip = AudioSystem.getClip();
+        clip.open(AudioSystem.getAudioInputStream(new File(filename)));
+        clip.start();
+    } 
+    catch (Exception exc){
+        exc.printStackTrace(System.out);
+    }
   }
 
   public void draw() {
+    if (lngSongTime + 113000000000L <= System.nanoTime()){
+      play("Anxiety.wav");
+      lngSongTime = System.nanoTime();
+      System.out.println("iubgrieub");
+    }
     // draws backdrops(end screen, title screen, stage backdrops)
     if (blnEnd){
       image(imgWin, 0, 0);
