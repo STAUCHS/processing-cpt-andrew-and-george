@@ -29,7 +29,7 @@ public class Sketch extends PApplet {
   int intMoveDisable; // disables left right input in a certain direction for a certain time
   double dblSpdX; // player x speed
   double dblSpdY; // player y speed
-  double dblStamina; // remaining stamina for climbing
+  float fltStamina; // remaining stamina for climbing
   int intDeathCount = 0; 
   int intGameTick = 0; // counter for certain animations
   double dblDeathTime = -1; // time remaining for death animation, -1 means not dead
@@ -133,6 +133,9 @@ public class Sketch extends PApplet {
     } else {
       screenShake();
       backdrop();
+      fill(50, 50, 225);
+      rect(1420, 880, -20, -fltStamina);
+      System.out.println(fltStamina);
     }
     
     if (dblDeathTime == -1){ // if not dead
@@ -143,9 +146,9 @@ public class Sketch extends PApplet {
         if (intDashing < 7){
           intDashs = intDashMax;
         }
-        dblStamina = 125;
+        fltStamina = 100;
       }
-     
+      
       dashMechanic();
       walking();
       jumpMechanic();
@@ -269,9 +272,9 @@ public class Sketch extends PApplet {
       image(imgPlayerLeftDash, intX, intY - 44);
     } else if(dblSpdX > 0 && intDashing > -1){
       image(imgPlayerRightDash, intX, intY - 44);
-    } else if((detect(intX - 2, intY) == 1 || detect(intX - 2, intY - 44) == 1) && (dblSpdX > 0 || (blnClimb && dblStamina > 0)) ){
+    } else if((detect(intX - 2, intY) == 1 || detect(intX - 2, intY - 44) == 1) && (dblSpdX > 0 || (blnClimb && fltStamina > 0)) ){
       image(imgPlayerLeftClimb, intX, intY - 44);
-    } else if((detect(intX + 46, intY) == 1 || detect(intX + 46, intY - 44) == 1) && (dblSpdX < 0 || (blnClimb && dblStamina > 0)) ){
+    } else if((detect(intX + 46, intY) == 1 || detect(intX + 46, intY - 44) == 1) && (dblSpdX < 0 || (blnClimb && fltStamina > 0)) ){
       image(imgPlayerRightClimb, intX, intY - 44);
     }else if (dblSpdX > 0 && (detect(intX, intY + 1) == 1 || detect(intX + 44, intY + 1) == 1)){
       image(imgPlayerRight, intX, intY - 44);
@@ -383,15 +386,15 @@ public class Sketch extends PApplet {
     */
   public void walking(){
     if (intDashing == -1) {
-      if (blnClimb && dblStamina > 0 && (detect(intX - 1, intY) == 1 || detect(intX + 45, intY) == 1 || detect(intX - 1, intY - 44) == 1 || detect(intX + 45, intY - 44) == 1)) {
+      if (blnClimb && fltStamina > 0 && (detect(intX - 1, intY) == 1 || detect(intX + 45, intY) == 1 || detect(intX - 1, intY - 44) == 1 || detect(intX + 45, intY - 44) == 1)) {
         dblSpdX = 0;
         dblSpdY = 0;
         if (blnUp) {
           dblSpdY = -2.75;
-          dblStamina -= 1;
+          fltStamina -= 1;
         } else if (blnDown) {
           dblSpdY = 2.75;
-          dblStamina -= 1;
+          fltStamina -= 1;
         }
       } else if (blnRight && dblSpdX > 7.5 && dblSpdX < 10 && intMoveDisable <= 0) {
         dblSpdX = 10;
